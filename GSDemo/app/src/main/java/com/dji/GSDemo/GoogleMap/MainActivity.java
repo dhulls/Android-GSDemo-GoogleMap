@@ -316,23 +316,26 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 //            double xValuePoint1 = Math.sqrt(distancePoint1 * distancePoint1 - yValuePoint1 * yValuePoint1);
 //            double xValuePoint2 = Math.sqrt(distancePoint2 * distancePoint2 - yValuePoint2 * yValuePoint2);
 
-
+//
             LatLng[] points = new LatLng[7];
-            double theta = Math.atan((yValuePoint2 - yValuePoint1) / (xValuePoint2 - xValuePoint1));
-            double latShift4 = (50 * Math.sin(theta)) / 110574;
-            double longShift4 = ((50 * Math.cos(theta)) / (111320 * Math.cos(airstripPoint2.latitude)));
-            double latShift1 = (20 * Math.cos(theta)) / 110574;
-            points[4] = new LatLng(airstripPoint2.latitude + latShift4, airstripPoint2.longitude + longShift4);
-            points[3] = new LatLng(airstripPoint1.latitude - latShift4, airstripPoint1.longitude - longShift4);
-            double longShift1 = (20 * Math.sin(theta)) / (111320 * Math.cos(points[4].latitude));
-            double latShift5 = (20 * Math.cos(theta)) / 110574;
-            double longShift5 = (20 * Math.sin(theta)) / (111320 * Math.cos(points[4].latitude));
-            points[1] = new LatLng(points[4].latitude - latShift1, points[4].longitude + longShift1);
-            points[5] = new LatLng(points[4].latitude + latShift5, points[4].longitude - longShift5);
-            points[2] = new LatLng(points[3].latitude + latShift1, points[3].longitude - longShift1);
-            points[6] = new LatLng(points[3].latitude - latShift5, points[3].longitude + longShift5);
+//            double theta = Math.atan((yValuePoint2 - yValuePoint1) / (xValuePoint2 - xValuePoint1));
+//            double latShift4 = (50 * Math.sin(theta)) / 110574;
+//            double longShift4 = ((50 * Math.cos(theta)) / (111320 * Math.cos(airstripPoint2.latitude)));
+//            double latShift1 = (20 * Math.cos(theta)) / 110574;
+//            points[4] = new LatLng(airstripPoint2.latitude + latShift4, airstripPoint2.longitude + longShift4);
+//            points[3] = new LatLng(airstripPoint1.latitude - latShift4, airstripPoint1.longitude - longShift4);
+//            double longShift1 = (20 * Math.sin(theta)) / (111320 * Math.cos(points[4].latitude));
+//            double latShift5 = (20 * Math.cos(theta)) / 110574;
+//            double longShift5 = (20 * Math.sin(theta)) / (111320 * Math.cos(points[4].latitude));
+//            points[1] = new LatLng(points[4].latitude - latShift1, points[4].longitude + longShift1);
+//            points[5] = new LatLng(points[4].latitude + latShift5, points[4].longitude - longShift5);
+//            points[2] = new LatLng(points[3].latitude + latShift1, points[3].longitude - longShift1);
+//            points[6] = new LatLng(points[3].latitude - latShift5, points[3].longitude + longShift5);
 
-            for (int i = 1; i <= 6; i++) {
+            points[1] = new LatLng(43.57, -115.3);
+            points[2] = new LatLng(43.75, -115.4);
+            points[3] = new LatLng(44, -116);
+            for (int i = 1; i <= 3; i++) {
                 markWaypoint(points[i]);
                 Waypoint mWaypoint = new Waypoint(points[i].latitude, points[i].longitude, altitude);
                 //Add Waypoints to Waypoint arraylist;
@@ -345,6 +348,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                     waypointMissionBuilder.waypointList(waypointList).waypointCount(waypointList.size());
                 }
             }
+
         }
 
     @Override
