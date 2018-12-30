@@ -71,9 +71,10 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private Marker droneMarker = null;
 
     private float altitude = 125.0f; //every point will have this altitude
-    private float mSpeed = 1.1f;
+    private float mSpeed = 3.45f;
 	
 	private int numPointsAdded = 0; //counter to contain the number of points that have been added
+	private int pictureInterval = 4; //time to take the pictures
 	private LatLng airstripPoint1; //2 points to save the locations of the runway
 	private LatLng airstripPoint2;
 
