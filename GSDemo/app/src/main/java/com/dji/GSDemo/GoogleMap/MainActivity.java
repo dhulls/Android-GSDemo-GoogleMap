@@ -72,6 +72,10 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
     private float altitude = 100.0f;
     private float mSpeed = 10.0f;
+	
+	private int numPointsAdded = 0; //counter to contain the number of points that have been added
+	private LatLng airstripPoint1; //2 points to save the locations of the runway
+	private LatLng airstripPoint2;
 
     private List<Waypoint> waypointList = new ArrayList<>();
 
@@ -302,7 +306,38 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 		}
     @Override
     public void onMapClick(LatLng point) {
-         }
+		if (isAdd == true && numPointsAdded < 2){
+			if(numPointsAdded == 0)
+				airstripPoint1 = point;
+			else if (numPointsAdded == 1)
+				airstripPoint2 = point;
+			numPointsAdded++;
+			
+			if(numPointsAdded == 2)
+			{
+				enableDisableAdd();
+				createPath(airstripPoint1, airstripPoint2);
+				numPointsAdded = 0;
+			}
+			
+			/*
+            markWaypoint(point);
+            Waypoint mWaypoint = new Waypoint(point.latitude, point.longitude, altitude);
+            //Add Waypoints to Waypoint arraylist;
+            if (waypointMissionBuilder != null) {
+                waypointList.add(mWaypoint);
+                waypointMissionBuilder.waypointList(waypointList).waypointCount(waypointList.size());
+            }else
+            {
+                waypointMissionBuilder = new WaypointMission.Builder();
+                waypointList.add(mWaypoint);
+                waypointMissionBuilder.waypointList(waypointList).waypointCount(waypointList.size());
+            }
+			*/
+        }else{
+            setResultToToast("Cannot Add Waypoint");
+        }
+    }
 
     public static boolean checkGpsCoordination(double latitude, double longitude) {
         return (latitude > -90 && latitude < 90 && longitude > -180 && longitude < 180) && (latitude != 0f && longitude != 0f);
