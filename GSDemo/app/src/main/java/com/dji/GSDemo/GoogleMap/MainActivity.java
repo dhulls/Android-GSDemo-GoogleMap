@@ -73,6 +73,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
     private float altitude = 125.0f; //every point will have this altitude
     private float mSpeed = 3.45f;
+	private float distanceInterval = 10; //take a photo every X meters while travelling between waypoints
 	
 	private int numPointsAdded = 0; //counter to contain the number of points that have been added
 	private int pictureInterval = 4; //time to take the pictures
@@ -617,6 +618,10 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 				{
 					//on the last waypoint
 					//waypointMissionBuilder.getWaypointList().get(i).addAction(WaypointAction(GIMBAL_PITCH, -90));
+				}
+				if(i % 2 == 1)
+				{
+					waypointMissionBuilder.getWaypointList().get(i).shootPhotoDistanceInterval = distanceInterval;
 				}
 			}
 
