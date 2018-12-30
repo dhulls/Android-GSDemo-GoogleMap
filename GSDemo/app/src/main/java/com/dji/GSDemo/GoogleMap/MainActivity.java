@@ -278,9 +278,11 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
     }
 
-    @Override
-    public void onMapClick(LatLng point) {
-        if (isAdd == true){
+		public void createPath(LatLng point1, LatLng point2){
+				//Create an array of 6 points 
+		
+				//for loop to go through 6 points
+				if (isAdd == true){
             markWaypoint(point);
             Waypoint mWaypoint = new Waypoint(point.latitude, point.longitude, altitude);
             //Add Waypoints to Waypoint arraylist;
@@ -296,7 +298,11 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         }else{
             setResultToToast("Cannot Add Waypoint");
         }
-    }
+
+		}
+    @Override
+    public void onMapClick(LatLng point) {
+         }
 
     public static boolean checkGpsCoordination(double latitude, double longitude) {
         return (latitude > -90 && latitude < 90 && longitude > -180 && longitude < 180) && (latitude != 0f && longitude != 0f);
