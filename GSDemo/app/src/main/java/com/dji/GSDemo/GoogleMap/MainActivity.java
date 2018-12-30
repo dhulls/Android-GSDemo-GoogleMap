@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.lang.Math;
 
 import dji.common.flightcontroller.FlightControllerState;
 import dji.common.mission.waypoint.Waypoint;
@@ -273,33 +274,76 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         return instance;
     }
 
+
+    private double haversine(LatLng point1, LatLng point2) {
+        int radius = 6371000; // radius of the earth
+        double lat1 = Math.toRadians(point1.latitude);
+        double lat2 = Math.toRadians(point2.latitude);
+        double changeInLat = Math.toRadians(point2.latitude - point1.latitude);
+        double changeInLot = Math.toRadians(point2.longitude - point1.longitude);
+        double formula = (Math.sin(changeInLat / 2) * Math.sin(changeInLat / 2)) +
+                (Math.cos(lat1) * Math.cos(lat2) * Math.sin(changeInLot) * Math.sin(changeInLot));
+        double formulaPart2 = 2 * Math.atan2(Math.sqrt(formula), Math.sqrt(1 - formula));
+        return radius * formulaPart2;
+    }
+
     private void setUpMap() {
         gMap.setOnMapClickListener(this);// add the listener for click for amap object
 
     }
 
-		public void createPath(LatLng point1, LatLng point2){
+		public void createPath() {
+            LatLng midPoint = new LatLng(((airstripPoint1.latitude + airstripPoint2.latitude) / 2),
+                    ((airstripPoint1.longtiude + airstripPoint2.longitude) / 2));
+            double distanceToOrigin = haversine(airstripPoint2, midPoint);
+            double yValuePoint2 = haversine(airstripPoint2, new LatLng(airstripPoint2.longitude, midPoint.latitude));
+            double xValuePoint2 = Math.sqrt((distanceToOrigin * distanceToOrigin) - (yValuePoint2 * yValuePoint2));
+            double yValuePoint1 = haversine(airstripPoint1, new LatLng(airstripPoint1.longitude, midPoint.latitude));
+            double xValuePoint1 = Math.sqrt((distanceToOrigin * distanceToOrigin) - (yValuePoint1 * yValuePoint1));
+
+//
+//            double distancePoint1 = haversine(airstripPoint1, new LatLng(0, 0));
+//            double yValuePoint1 = haversine(airstripPoint1, new LatLng(airstripPoint1.longitude, 0));
+//            double distancePoint2 = haversine(airstripPoint2, new LatLng(0, 0));
+//            double yValuePoint2 = haversine(airstripPoint2, new LatLng(airstripPoint2.longitude, 0));
+//
+//            double xValuePoint1 = Math.sqrt(distancePoint1 * distancePoint1 - yValuePoint1 * yValuePoint1);
+//            double xValuePoint2 = Math.sqrt(distancePoint2 * distancePoint2 - yValuePoint2 * yValuePoint2);
+
+
+            LatLng[] points = new LatLng[7];
+            double theta = Math.atan((yValuePoint2 - yValuePoint1) / (xValuePoint2 - xValuePoint1));
+            double latShift4 = (50 * Math.sin(theta)) / 110574;
+            double longShift4 = ((50 * Math.cos(theta)) / (111320 * Math.cos(airstripPoint2.latitude)));
+            double latShift1 = (20 * Math.cos(theta)) / 110574;
+            double longShift1 = (20 * Math.sin(theta)) / (111320 * Math.cos(points[4].latitude));
+            double latShift5 = (20 * Math.cos(theta)) / 110574;
+            double longShift5 = (20 * Math.sin(theta)) / (111320 * Math.cos(points[4].latitude));
+            points[4] = new LatLng(airstripPoint2.latitude + latShift4, airstripPoint2.longitude + longShift4);
+            points[1] = new LatLng(points[4].latitude - latShift1, points[4].longitude + longShift1);
+            points[5] = new LatLng(points[4].latitude + latShift5, points[4].longitude - longShift5);
+            points[3] = new LatLng(airstripPoint1.latitude - latShift4, airstripPoint1.longitude  - longShift4);
+            points[2] = new LatLng(points[3].latitude + latShift1, points[3].longitude - longShift1);
+            points[6] = new LatLng(points[3].latitude - latShift5, points[3].longitude + longShift5);
+
+
 				//Create an array of 6 points 
 		
 				//for loop to go through 6 points
-				if (isAdd == true){
-            markWaypoint(point);
-            Waypoint mWaypoint = new Waypoint(point.latitude, point.longitude, altitude);
-            //Add Waypoints to Waypoint arraylist;
-            if (waypointMissionBuilder != null) {
-                waypointList.add(mWaypoint);
-                waypointMissionBuilder.waypointList(waypointList).waypointCount(waypointList.size());
-            }else
-            {
-                waypointMissionBuilder = new WaypointMission.Builder();
-                waypointList.add(mWaypoint);
-                waypointMissionBuilder.waypointList(waypointList).waypointCount(waypointList.size());
+			for (int i = 1; i <= 6; i++) {
+                markWaypoint(points[i]);
+                Waypoint mWaypoint = new Waypoint(points[i].latitude, points[i].longitude, altitude);
+                //Add Waypoints to Waypoint arraylist;
+                if (waypointMissionBuilder != null) {
+                    waypointList.add(mWaypoint);
+                    waypointMissionBuilder.waypointList(waypointList).waypointCount(waypointList.size());
+                } else {
+                    waypointMissionBuilder = new WaypointMission.Builder();
+                    waypointList.add(mWaypoint);
+                    waypointMissionBuilder.waypointList(waypointList).waypointCount(waypointList.size());
+                }
             }
-        }else{
-            setResultToToast("Cannot Add Waypoint");
         }
-
-		}
     @Override
     public void onMapClick(LatLng point) {
          }
