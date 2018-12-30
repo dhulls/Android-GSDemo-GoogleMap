@@ -606,11 +606,19 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
             for (int i=0; i< waypointMissionBuilder.getWaypointList().size(); i++){
                 waypointMissionBuilder.getWaypointList().get(i).altitude = altitude;
-            }
+				if(i == 0)
+				{
+					//on first waypoint
+				}
+				else if (i == waypointMissionBuilder.getWaypointList().size() - 1)
+				{
+					//on the last waypoint
+				}
+			}
 
             setResultToToast("Set Waypoint attitude successfully");
         }
-
+		
         DJIError error = getWaypointMissionOperator().loadMission(waypointMissionBuilder.build());
         if (error == null) {
             setResultToToast("loadWaypoint succeeded");
