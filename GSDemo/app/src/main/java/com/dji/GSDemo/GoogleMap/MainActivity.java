@@ -297,7 +297,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
     }
 
-
 		public void createPath() {
             LatLng midPoint = new LatLng(((airstripPoint1.latitude + airstripPoint2.latitude) / 2),
                     ((airstripPoint1.longitude + airstripPoint2.longitude) / 2));
@@ -415,7 +414,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         });
     }
 
-	private void markAirstrip(LatLng point){
+	private void markAirstrip(LatLng point){ //different color for airstrip markers
         //Create MarkerOptions object
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(point);
@@ -463,6 +462,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 break;
             }
             case R.id.upload:{
+				configWayPointMission();
                 uploadWayPointMission();
                 break;
             }
