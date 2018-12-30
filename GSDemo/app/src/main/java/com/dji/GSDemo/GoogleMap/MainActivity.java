@@ -72,11 +72,10 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private Marker droneMarker = null;
 
     private float altitude = 125.0f; //every point will have this altitude
-    private float mSpeed = 3.45f;
-	private float distanceInterval = 10; //take a photo every X meters while travelling between waypoints
+    private float mSpeed = 4.0f;
+	private const float distanceInterval = 13.8; //take a photo every X meters while travelling between waypoints
 	
 	private int numPointsAdded = 0; //counter to contain the number of points that have been added
-	private int pictureInterval = 4; //time to take the pictures
 	private LatLng airstripPoint1; //2 points to save the locations of the runway
 	private LatLng airstripPoint2;
 
@@ -360,7 +359,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 			else if (numPointsAdded == 1)
 				airstripPoint2 = point;
 			
-			markWaypoint(point);
+			markAirstrip(point);
 			numPointsAdded++;
 			
 			if(numPointsAdded == 2)
@@ -416,6 +415,15 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         });
     }
 
+	private void markAirstrip(LatLng point){
+        //Create MarkerOptions object
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(point);
+        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+        Marker marker = gMap.addMarker(markerOptions);
+        mMarkers.put(mMarkers.size(), marker);
+    }
+	
     private void markWaypoint(LatLng point){
         //Create MarkerOptions object
         MarkerOptions markerOptions = new MarkerOptions();
