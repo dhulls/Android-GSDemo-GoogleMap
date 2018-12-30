@@ -70,7 +70,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private final Map<Integer, Marker> mMarkers = new ConcurrentHashMap<Integer, Marker>();
     private Marker droneMarker = null;
 
-    private float altitude = 125.0f;
+    private float altitude = 125.0f; //every point will have this altitude
     private float mSpeed = 1.1f;
 	
 	private int numPointsAdded = 0; //counter to contain the number of points that have been added
@@ -82,7 +82,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     public static WaypointMission.Builder waypointMissionBuilder;
     private FlightController mFlightController;
     private WaypointMissionOperator instance;
-    private WaypointMissionFinishedAction mFinishedAction = WaypointMissionFinishedAction.NO_ACTION;
+    private WaypointMissionFinishedAction mFinishedAction = WaypointMissionFinishedAction.GO_HOME; //changed to GO_HOME
     private WaypointMissionHeadingMode mHeadingMode = WaypointMissionHeadingMode.AUTO;
 
     @Override
@@ -282,7 +282,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
     }
 
-		public void createPath(LatLng point1, LatLng point2){
+	public void createPath(LatLng point1, LatLng point2){
 				//Create an array of 6 points 
 		
 				//for loop to go through 6 points
