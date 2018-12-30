@@ -71,15 +71,20 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private final Map<Integer, Marker> mMarkers = new ConcurrentHashMap<Integer, Marker>();
     private Marker droneMarker = null;
 
-    private float altitude = 100.0f;
-    private float mSpeed = 10.0f;
+    private float altitude = 125.0f; //every point will have this altitude
+    private float mSpeed = 3.45f;
+	
+	private int numPointsAdded = 0; //counter to contain the number of points that have been added
+	private int pictureInterval = 4; //time to take the pictures
+	private LatLng airstripPoint1; //2 points to save the locations of the runway
+	private LatLng airstripPoint2;
 
     private List<Waypoint> waypointList = new ArrayList<>();
 
     public static WaypointMission.Builder waypointMissionBuilder;
     private FlightController mFlightController;
     private WaypointMissionOperator instance;
-    private WaypointMissionFinishedAction mFinishedAction = WaypointMissionFinishedAction.NO_ACTION;
+    private WaypointMissionFinishedAction mFinishedAction = WaypointMissionFinishedAction.GO_HOME; //changed to GO_HOME
     private WaypointMissionHeadingMode mHeadingMode = WaypointMissionHeadingMode.AUTO;
 
     @Override
@@ -292,9 +297,10 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
     }
 
+
 		public void createPath() {
             LatLng midPoint = new LatLng(((airstripPoint1.latitude + airstripPoint2.latitude) / 2),
-                    ((airstripPoint1.longtiude + airstripPoint2.longitude) / 2));
+                    ((airstripPoint1.longitude + airstripPoint2.longitude) / 2));
             double distanceToOrigin = haversine(airstripPoint2, midPoint);
             double yValuePoint2 = haversine(airstripPoint2, new LatLng(airstripPoint2.longitude, midPoint.latitude));
             double xValuePoint2 = Math.sqrt((distanceToOrigin * distanceToOrigin) - (yValuePoint2 * yValuePoint2));
@@ -322,15 +328,11 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             points[4] = new LatLng(airstripPoint2.latitude + latShift4, airstripPoint2.longitude + longShift4);
             points[1] = new LatLng(points[4].latitude - latShift1, points[4].longitude + longShift1);
             points[5] = new LatLng(points[4].latitude + latShift5, points[4].longitude - longShift5);
-            points[3] = new LatLng(airstripPoint1.latitude - latShift4, airstripPoint1.longitude  - longShift4);
+            points[3] = new LatLng(airstripPoint1.latitude - latShift4, airstripPoint1.longitude - longShift4);
             points[2] = new LatLng(points[3].latitude + latShift1, points[3].longitude - longShift1);
             points[6] = new LatLng(points[3].latitude - latShift5, points[3].longitude + longShift5);
 
-
-				//Create an array of 6 points 
-		
-				//for loop to go through 6 points
-			for (int i = 1; i <= 6; i++) {
+            for (int i = 1; i <= 6; i++) {
                 markWaypoint(points[i]);
                 Waypoint mWaypoint = new Waypoint(points[i].latitude, points[i].longitude, altitude);
                 //Add Waypoints to Waypoint arraylist;
@@ -344,9 +346,41 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 }
             }
         }
+
     @Override
     public void onMapClick(LatLng point) {
-         }
+		if (isAdd == true){
+			if(numPointsAdded == 0)
+				airstripPoint1 = point;
+			else if (numPointsAdded == 1)
+				airstripPoint2 = point;
+			numPointsAdded++;
+			
+			if(numPointsAdded == 2)
+			{
+				enableDisableAdd();
+				createPath();
+				numPointsAdded = 0;
+			}
+			
+			/*
+            markWaypoint(point);
+            Waypoint mWaypoint = new Waypoint(point.latitude, point.longitude, altitude);
+            //Add Waypoints to Waypoint arraylist;
+            if (waypointMissionBuilder != null) {
+                waypointList.add(mWaypoint);
+                waypointMissionBuilder.waypointList(waypointList).waypointCount(waypointList.size());
+            }else
+            {
+                waypointMissionBuilder = new WaypointMission.Builder();
+                waypointList.add(mWaypoint);
+                waypointMissionBuilder.waypointList(waypointList).waypointCount(waypointList.size());
+            }
+			*/
+        }else{
+            setResultToToast("Cannot Add Waypoint");
+        }
+    }
 
     public static boolean checkGpsCoordination(double latitude, double longitude) {
         return (latitude > -90 && latitude < 90 && longitude > -180 && longitude < 180) && (latitude != 0f && longitude != 0f);
@@ -452,10 +486,11 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         LinearLayout wayPointSettings = (LinearLayout)getLayoutInflater().inflate(R.layout.dialog_waypointsetting, null);
 
         final TextView wpAltitude_TV = (TextView) wayPointSettings.findViewById(R.id.altitude);
-        RadioGroup speed_RG = (RadioGroup) wayPointSettings.findViewById(R.id.speed);
+        final TextView speed_TV = (TextView) wayPointSettings.findViewById(R.id.speed);
         RadioGroup actionAfterFinished_RG = (RadioGroup) wayPointSettings.findViewById(R.id.actionAfterFinished);
         RadioGroup heading_RG = (RadioGroup) wayPointSettings.findViewById(R.id.heading);
-
+		
+		/*
         speed_RG.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener(){
 
             @Override
@@ -470,6 +505,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             }
 
         });
+		*/
 
         actionAfterFinished_RG.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
 
