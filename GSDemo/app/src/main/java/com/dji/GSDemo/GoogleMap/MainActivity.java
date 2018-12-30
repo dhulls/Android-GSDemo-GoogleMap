@@ -354,6 +354,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 				airstripPoint1 = point;
 			else if (numPointsAdded == 1)
 				airstripPoint2 = point;
+			
+			markWaypoint(point);
 			numPointsAdded++;
 			
 			if(numPointsAdded == 2)
@@ -609,10 +611,12 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 				if(i == 0)
 				{
 					//on first waypoint
+					//waypointMissionBuilder.getWaypointList().get(i).addAction(WaypointAction(GIMBAL_PITCH, 0));
 				}
 				else if (i == waypointMissionBuilder.getWaypointList().size() - 1)
 				{
 					//on the last waypoint
+					//waypointMissionBuilder.getWaypointList().get(i).addAction(WaypointAction(GIMBAL_PITCH, -90));
 				}
 			}
 
