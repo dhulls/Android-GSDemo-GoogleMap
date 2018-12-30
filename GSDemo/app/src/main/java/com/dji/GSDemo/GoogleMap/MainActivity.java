@@ -70,8 +70,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private final Map<Integer, Marker> mMarkers = new ConcurrentHashMap<Integer, Marker>();
     private Marker droneMarker = null;
 
-    private float altitude = 100.0f;
-    private float mSpeed = 10.0f;
+    private float altitude = 125.0f;
+    private float mSpeed = 1.1f;
 	
 	private int numPointsAdded = 0; //counter to contain the number of points that have been added
 	private LatLng airstripPoint1; //2 points to save the locations of the runway
@@ -306,7 +306,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 		}
     @Override
     public void onMapClick(LatLng point) {
-		if (isAdd == true && numPointsAdded < 2){
+		if (isAdd == true){
 			if(numPointsAdded == 0)
 				airstripPoint1 = point;
 			else if (numPointsAdded == 1)
@@ -443,10 +443,11 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         LinearLayout wayPointSettings = (LinearLayout)getLayoutInflater().inflate(R.layout.dialog_waypointsetting, null);
 
         final TextView wpAltitude_TV = (TextView) wayPointSettings.findViewById(R.id.altitude);
-        RadioGroup speed_RG = (RadioGroup) wayPointSettings.findViewById(R.id.speed);
+        final TextView speed_TV = (TextView) wayPointSettings.findViewById(R.id.speed);
         RadioGroup actionAfterFinished_RG = (RadioGroup) wayPointSettings.findViewById(R.id.actionAfterFinished);
         RadioGroup heading_RG = (RadioGroup) wayPointSettings.findViewById(R.id.heading);
-
+		
+		/*
         speed_RG.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener(){
 
             @Override
@@ -461,6 +462,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             }
 
         });
+		*/
 
         actionAfterFinished_RG.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
 
