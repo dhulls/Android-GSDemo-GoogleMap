@@ -322,13 +322,13 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             double latShift4 = (50 * Math.sin(theta)) / 110574;
             double longShift4 = ((50 * Math.cos(theta)) / (111320 * Math.cos(airstripPoint2.latitude)));
             double latShift1 = (20 * Math.cos(theta)) / 110574;
+            points[4] = new LatLng(airstripPoint2.latitude + latShift4, airstripPoint2.longitude + longShift4);
+            points[3] = new LatLng(airstripPoint1.latitude - latShift4, airstripPoint1.longitude - longShift4);
             double longShift1 = (20 * Math.sin(theta)) / (111320 * Math.cos(points[4].latitude));
             double latShift5 = (20 * Math.cos(theta)) / 110574;
             double longShift5 = (20 * Math.sin(theta)) / (111320 * Math.cos(points[4].latitude));
-            points[4] = new LatLng(airstripPoint2.latitude + latShift4, airstripPoint2.longitude + longShift4);
             points[1] = new LatLng(points[4].latitude - latShift1, points[4].longitude + longShift1);
             points[5] = new LatLng(points[4].latitude + latShift5, points[4].longitude - longShift5);
-            points[3] = new LatLng(airstripPoint1.latitude - latShift4, airstripPoint1.longitude - longShift4);
             points[2] = new LatLng(points[3].latitude + latShift1, points[3].longitude - longShift1);
             points[6] = new LatLng(points[3].latitude - latShift5, points[3].longitude + longShift5);
 
