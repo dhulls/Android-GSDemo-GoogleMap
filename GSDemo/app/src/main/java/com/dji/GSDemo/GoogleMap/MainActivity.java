@@ -73,7 +73,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
     private float altitude = 125.0f; //every point will have this altitude
     private float mSpeed = 4.0f;
-	private const float distanceInterval = 13.8; //take a photo every X meters while travelling between waypoints
+	private const float distanceInterval = 13.8; //take a photo every X meters while travelling between waypoints this should ideally be a function of the speed and altitude (and therefore camera focal lengths, diameters, etc - see excel calculation sheet)
 	
 	private int numPointsAdded = 0; //counter to contain the number of points that have been added
 	private LatLng airstripPoint1; //2 points to save the locations of the runway
@@ -624,14 +624,14 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 				if(i == 0)
 				{
 					//on first waypoint
-					//waypointMissionBuilder.getWaypointList().get(i).addAction(WaypointAction(GIMBAL_PITCH, 0));
+					waypointMissionBuilder.getWaypointList().get(i).addAction(WaypointAction(GIMBAL_PITCH, 0));
 				}
 				else if (i == waypointMissionBuilder.getWaypointList().size() - 1)
 				{
 					//on the last waypoint
-					//waypointMissionBuilder.getWaypointList().get(i).addAction(WaypointAction(GIMBAL_PITCH, -90));
+					waypointMissionBuilder.getWaypointList().get(i).addAction(WaypointAction(GIMBAL_PITCH, -90));
 				}
-				if(i % 2 == 1)
+				if(i % 2 == 0) //this will only trigger on the even waypoint indexes (waypoint 1 has index 0)
 				{
 					waypointMissionBuilder.getWaypointList().get(i).shootPhotoDistanceInterval = distanceInterval;
 				}
