@@ -418,7 +418,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         //Create MarkerOptions object
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(point);
-        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.aircraft));
         Marker marker = gMap.addMarker(markerOptions);
         mMarkers.put(mMarkers.size(), marker);
     }
@@ -619,25 +619,18 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
         if (waypointMissionBuilder.getWaypointList().size() > 0){
 
-            for (int i=0; i< waypointMissionBuilder.getWaypointList().size(); i++){
+            for (int i=0; i< waypointMissionBuilder.getWaypointList().size(); i++)
+			{
                 waypointMissionBuilder.getWaypointList().get(i).altitude = altitude;
-				if(i == 0)
-				{
-					//on first waypoint
+				if(i == 0)//on first waypoint
 					waypointMissionBuilder.getWaypointList().get(i).addAction(WaypointAction(GIMBAL_PITCH, 0));
-				}
-				else if (i == waypointMissionBuilder.getWaypointList().size() - 1)
-				{
-					//on the last waypoint
+				else if (i == waypointMissionBuilder.getWaypointList().size() - 1)//on the last waypoint
 					waypointMissionBuilder.getWaypointList().get(i).addAction(WaypointAction(GIMBAL_PITCH, -90));
-				}
 				if(i % 2 == 0) //this will only trigger on the even waypoint indexes (waypoint 1 has index 0)
-				{
 					waypointMissionBuilder.getWaypointList().get(i).shootPhotoDistanceInterval = distanceInterval;
-				}
 			}
 
-            setResultToToast("Set Waypoint attitude successfully");
+            setResultToToast("Set Waypoint attitude successfully"); //This is the function that creates those messages on screen.
         }
 		
         DJIError error = getWaypointMissionOperator().loadMission(waypointMissionBuilder.build());
