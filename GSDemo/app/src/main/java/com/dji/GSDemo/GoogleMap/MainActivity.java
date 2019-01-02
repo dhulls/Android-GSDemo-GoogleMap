@@ -297,14 +297,14 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 
     }
 
-		public void createPath() {
-            LatLng midPoint = new LatLng(((airstripPoint1.latitude + airstripPoint2.latitude) / 2),
-                    ((airstripPoint1.longitude + airstripPoint2.longitude) / 2));
-            double distanceToOrigin = haversine(airstripPoint2, midPoint);
-            double yValuePoint2 = haversine(airstripPoint2, new LatLng(airstripPoint2.longitude, midPoint.latitude));
-            double xValuePoint2 = Math.sqrt((distanceToOrigin * distanceToOrigin) - (yValuePoint2 * yValuePoint2));
-            double yValuePoint1 = haversine(airstripPoint1, new LatLng(airstripPoint1.longitude, midPoint.latitude));
-            double xValuePoint1 = Math.sqrt((distanceToOrigin * distanceToOrigin) - (yValuePoint1 * yValuePoint1));
+	public void createPath() {
+        LatLng midPoint = new LatLng(((airstripPoint1.latitude + airstripPoint2.latitude) / 2),
+                ((airstripPoint1.longitude + airstripPoint2.longitude) / 2));
+        double distanceToOrigin = haversine(airstripPoint2, midPoint);
+        double yValuePoint2 = haversine(airstripPoint2, new LatLng(airstripPoint2.longitude, midPoint.latitude));
+        double xValuePoint2 = Math.sqrt((distanceToOrigin * distanceToOrigin) - (yValuePoint2 * yValuePoint2));
+        double yValuePoint1 = haversine(airstripPoint1, new LatLng(airstripPoint1.longitude, midPoint.latitude));
+        double xValuePoint1 = Math.sqrt((distanceToOrigin * distanceToOrigin) - (yValuePoint1 * yValuePoint1));
 
 //
 //            double distancePoint1 = haversine(airstripPoint1, new LatLng(0, 0));
@@ -330,6 +330,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
 //            points[5] = new LatLng(points[4].latitude + latShift5, points[4].longitude - longShift5);
 //            points[2] = new LatLng(points[3].latitude + latShift1, points[3].longitude - longShift1);
 //            points[6] = new LatLng(points[3].latitude - latShift5, points[3].longitude + longShift5);
+
+		//When assigning points, point 1 should be the closest corner of the set.
 
             points[1] = new LatLng(43.57, -115.3);
             points[2] = new LatLng(43.75, -115.4);
@@ -418,7 +420,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         //Create MarkerOptions object
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(point);
-        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.aircraft));
+        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.X_marker));
         Marker marker = gMap.addMarker(markerOptions);
         mMarkers.put(mMarkers.size(), marker);
     }
@@ -455,6 +457,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 waypointList.clear();
                 waypointMissionBuilder.waypointList(waypointList);
                 updateDroneLocation();
+				numPointsAdded = 0;
+				//should clear all the markers as well - not sure if this already happens
                 break;
             }
             case R.id.config:{
@@ -682,6 +686,12 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     public void onMapReady(GoogleMap googleMap) {
         if (gMap == null) {
             gMap = googleMap;
+			 
+			//This should change the view to a satellite view.
+			//Left commented for now to keep the loading times shorter while testing. 
+			//See https://developers.google.com/maps/documentation/android-sdk/map for more details
+			//gMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+			
             setUpMap();
         }
 
